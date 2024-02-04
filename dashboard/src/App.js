@@ -386,7 +386,7 @@ function App() {
       }
     );
     const content = await rawResponse.json()
-    console.log(content);
+    alert("Email sent successfully")
   };
 
   return (
