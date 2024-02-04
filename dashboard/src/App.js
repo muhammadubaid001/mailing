@@ -371,10 +371,22 @@ function App() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log(state);
+    const rawResponse = await fetch(
+      `${process.env.REACT_APP_API_DOMAIN}/api/send`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(state),
+      }
+    );
+    const content = await rawResponse.json()
+    console.log(content);
   };
 
   return (
@@ -403,7 +415,7 @@ function App() {
                 label="Add Client"
                 name="client"
                 containerProps={{
-                  className: "min-w-0"
+                  className: "min-w-0",
                 }}
                 value={state.client}
                 onChange={handleChange}
@@ -413,7 +425,7 @@ function App() {
                 label="Date"
                 type="date"
                 containerProps={{
-                  className: "min-w-0"
+                  className: "min-w-0",
                 }}
                 value={state.generalDate}
                 name="generalDate"
@@ -427,7 +439,7 @@ function App() {
                 value={state.address}
                 name="address"
                 containerProps={{
-                  className: "min-w-0"
+                  className: "min-w-0",
                 }}
                 onChange={handleChange}
               />
@@ -437,7 +449,7 @@ function App() {
                 value={state.phoneNumber}
                 type="text"
                 containerProps={{
-                  className: "min-w-0"
+                  className: "min-w-0",
                 }}
                 className="min-w-full"
                 name="telephone"
@@ -450,7 +462,7 @@ function App() {
                 label="Company"
                 name="company"
                 containerProps={{
-                  className: "min-w-0"
+                  className: "min-w-0",
                 }}
                 className="min-w-full"
                 onChange={handleChange}
@@ -460,10 +472,9 @@ function App() {
                 value={state.email}
                 label="Email"
                 containerProps={{
-                  className: "min-w-0"
+                  className: "min-w-0",
                 }}
                 type="email"
-         
                 name="email"
                 onChange={handleChange}
               />
@@ -479,14 +490,14 @@ function App() {
                 label="Company Name"
                 name="companyName"
                 containerProps={{
-                  className: "min-w-0"
+                  className: "min-w-0",
                 }}
                 onChange={handleChange}
               />
               <Input
                 size="lg"
                 containerProps={{
-                  className: "min-w-0"
+                  className: "min-w-0",
                 }}
                 label="Date"
                 type="date"
@@ -509,7 +520,7 @@ function App() {
                 size="lg"
                 label="Address"
                 containerProps={{
-                  className: "min-w-0"
+                  className: "min-w-0",
                 }}
                 name="transporterAddress"
                 onChange={handleChange}
@@ -518,7 +529,7 @@ function App() {
                 size="lg"
                 label="Telephone"
                 containerProps={{
-                  className: "min-w-0"
+                  className: "min-w-0",
                 }}
                 type="number"
                 name="transporterPhoneNumber"
