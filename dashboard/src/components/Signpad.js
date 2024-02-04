@@ -3,15 +3,23 @@ import React, { Component, Fragment } from "react";
 import SignaturePad from "react-signature-canvas";
 
 class SignPad extends Component {
-  state = { trimmedDataURL: null };
+  constructor(props) {
+    super(props);
+    this.state = { trimmedDataURL: null };
+  }
   sigPad = {};
 
   clear = () => {
     this.sigPad.clear();
   };
+
   trim = () => {
     this.setState({
       trimmedDataURL: this.sigPad.getTrimmedCanvas().toDataURL("image/png"),
+    });
+    this.props.setState({
+      ...this.props.state,
+      image: this.sigPad.getTrimmedCanvas().toDataURL("image/png"),
     });
   };
   render() {
@@ -37,11 +45,17 @@ class SignPad extends Component {
               alt=""
             />
           ) : null}
-          <div className="justify-start items-center gap-3 flex">
-            <Button size="sm" color="blue" type="submit" onClick={this.trim}>
+          <div className="items-center gap-3 flex mt-4">
+            <Button size="sm" color="blue" type="button" onClick={this.trim}>
               Sign
             </Button>
-            <Button size="sm" type="button" variant="outlined" onClick={this.clear}>
+            <Button
+              size="sm"
+              type="button"
+              color="blue"
+              variant="outlined"
+              onClick={this.clear}
+            >
               Clear
             </Button>
           </div>

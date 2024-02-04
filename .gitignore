@@ -1,7 +1,9 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
+server/node_modules
+dashboard/node_modules
+dashboard/build
 /.pnp
 .pnp.js
 
@@ -13,7 +15,10 @@
 
 # misc
 .DS_Store
-.env.local
+server/.env
+server/dropo.drawio
+dashboard/.env.local
+dashboard/.env
 .env.development.local
 .env.test.local
 .env.production.local
