@@ -5,7 +5,7 @@ const router = require("express").Router();
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const sendEmail = require("../utils/sendEmail");
-require("dotenv").config()
+require("dotenv").config();
 
 // Middlewares
 app.use(cookieParser());
@@ -18,20 +18,18 @@ app.use(
   "/api/",
   router.post("/send", async (req, res, next) => {
     try {
+      await sendEmail({
+        email: req.body.email,
+        subject: "Please do not reply to this email",
+        message: "noreply",
+      });
 
-        await sendEmail({
-            email:req.body.email,
-            subject: "Please do not reply to this email",
-            message: 'noreply'
-        })
-
-        res.status(200).send({
-            success: true,
-            message: `Email sent to successfully`
-        })
-
+      res.status(200).send({
+        success: true,
+        message: `Email sent successfully`,
+      });
     } catch (error) {
-       res.status(500).send({message: error.message})
+      res.status(500).send({ message: error.message });
     }
   })
 );

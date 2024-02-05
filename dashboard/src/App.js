@@ -374,28 +374,25 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const rawResponse = await fetch(
-      `${process.env.REACT_APP_API_DOMAIN}/api/send`,
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(state),
-      }
-    );
-    const content = await rawResponse.json()
-    alert("Email sent successfully")
+    await fetch(`${process.env.REACT_APP_API_DOMAIN}/api/send`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(state),
+    });
+    alert("Email sent successfully");
   };
 
   return (
     <div className="h-screen w-full flex flex-col items-center justify-between max-w-5xl mx-auto">
       <form onSubmit={handleSubmit} className="flex w-full flex-col gap-6 p-8">
+        <Typography variant="h3" className="leading-none">Regulated Medical Waste Manifest</Typography>
         <div className="flex flex-col md:flex-row gap-4">
           <div className="w-full flex-1">
-            <Typography variant="h5" className="py-2">
-              General Information
+            <Typography variant="h5" className="pb-2">
+              Generator Information
             </Typography>
             <Select
               size="lg"
@@ -415,7 +412,7 @@ function App() {
                 label="Add Client"
                 name="client"
                 containerProps={{
-                  className: "min-w-0",
+                  className: "!min-w-0",
                 }}
                 value={state.client}
                 onChange={handleChange}
@@ -425,7 +422,7 @@ function App() {
                 label="Date"
                 type="date"
                 containerProps={{
-                  className: "min-w-0",
+                  className: "!min-w-0",
                 }}
                 value={state.generalDate}
                 name="generalDate"
@@ -439,7 +436,7 @@ function App() {
                 value={state.address}
                 name="address"
                 containerProps={{
-                  className: "min-w-0",
+                  className: "!min-w-0",
                 }}
                 onChange={handleChange}
               />
@@ -449,9 +446,8 @@ function App() {
                 value={state.phoneNumber}
                 type="text"
                 containerProps={{
-                  className: "min-w-0",
+                  className: "!min-w-0",
                 }}
-                className="min-w-full"
                 name="telephone"
                 onChange={handleChange}
               />
@@ -462,9 +458,8 @@ function App() {
                 label="Company"
                 name="company"
                 containerProps={{
-                  className: "min-w-0",
+                  className: "!min-w-0",
                 }}
-                className="min-w-full"
                 onChange={handleChange}
               />
               <Input
@@ -472,7 +467,7 @@ function App() {
                 value={state.email}
                 label="Email"
                 containerProps={{
-                  className: "min-w-0",
+                  className: "!min-w-0",
                 }}
                 type="email"
                 name="email"
@@ -490,14 +485,14 @@ function App() {
                 label="Company Name"
                 name="companyName"
                 containerProps={{
-                  className: "min-w-0",
+                  className: "!min-w-0",
                 }}
                 onChange={handleChange}
               />
               <Input
                 size="lg"
                 containerProps={{
-                  className: "min-w-0",
+                  className: "!min-w-0",
                 }}
                 label="Date"
                 type="date"
@@ -505,22 +500,22 @@ function App() {
                 onChange={handleChange}
               />
             </div>
-            <div className="w-full">
-              <Input
-                size="lg"
-                className="!min-w-full"
-                label="Name of Person Collection Information"
-                type="text"
-                name="transporterName"
-                onChange={handleChange}
-              />
-            </div>
+            <Input
+              size="lg"
+              label="Name of Person Collection Information"
+              type="text"
+              containerProps={{
+                className: "!min-w-0",
+              }}
+              name="transporterName"
+              onChange={handleChange}
+            />
             <div className="w-full flex gap-4 my-4">
               <Input
                 size="lg"
                 label="Address"
                 containerProps={{
-                  className: "min-w-0",
+                  className: "!min-w-0",
                 }}
                 name="transporterAddress"
                 onChange={handleChange}
@@ -529,7 +524,7 @@ function App() {
                 size="lg"
                 label="Telephone"
                 containerProps={{
-                  className: "min-w-0",
+                  className: "!min-w-0",
                 }}
                 type="number"
                 name="transporterPhoneNumber"
