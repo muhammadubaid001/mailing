@@ -4,6 +4,7 @@ import {
   Option,
   Button,
   Typography,
+  Checkbox,
 } from "@material-tailwind/react";
 import { useState } from "react";
 import SignPad from "./components/Signpad";
@@ -344,11 +345,11 @@ function App() {
     phoneNumber: "",
     generalDate: "",
     sign: "",
-    companyName: "",
+    companyName: '',
     representative: "",
     transporterName: "",
-    transporterAddress: "",
-    transporterPhoneNumber: "",
+    transporterAddress: "7600 SE Johnson Creek Blvd, Portland, OR 97206",
+    transporterPhoneNumber: "503-477-8765",
     transporterDate: "",
   });
 
@@ -387,8 +388,13 @@ function App() {
 
   return (
     <div className="h-screen w-full flex flex-col items-center justify-between max-w-5xl mx-auto">
-      <form onSubmit={handleSubmit} className="flex w-full flex-col gap-6 p-8">
-        <Typography variant="h3" className="leading-none">Regulated Medical Waste Manifest</Typography>
+      <form
+        onSubmit={handleSubmit}
+        className="flex w-full flex-col gap-6 p-3 md:p-8"
+      >
+        <Typography variant="h3" className="leading-none">
+          Regulated Medical Waste Manifest
+        </Typography>
         <div className="flex flex-col md:flex-row gap-4">
           <div className="w-full flex-1">
             <Typography variant="h5" className="pb-2">
@@ -476,19 +482,25 @@ function App() {
             </div>
           </div>
           <div className="w-full flex-1">
-            <Typography variant="h5" className="py-2">
+            <Typography variant="h5" className="pb-2">
               Transporter Information
             </Typography>
             <div className="w-full flex gap-4 mb-4">
-              <Input
-                size="lg"
-                label="Company Name"
-                name="companyName"
-                containerProps={{
-                  className: "!min-w-0",
-                }}
-                onChange={handleChange}
-              />
+              <Select
+              label="Company"
+                onChange={(value) =>
+                  setState({
+                    ...state,
+                    companyName: value,
+                  })
+                }
+              >
+                {["Synergy Environmental", "Rapid Response Bio Clean"].map((item) => (
+                  <Option key={item} value={item}>
+                    {item}
+                  </Option>
+                ))}
+              </Select>
               <Input
                 size="lg"
                 containerProps={{
@@ -517,6 +529,7 @@ function App() {
                 containerProps={{
                   className: "!min-w-0",
                 }}
+                value={state.transporterAddress}
                 name="transporterAddress"
                 onChange={handleChange}
               />
@@ -526,14 +539,15 @@ function App() {
                 containerProps={{
                   className: "!min-w-0",
                 }}
-                type="number"
+                type="text"
+                value={state.transporterPhoneNumber}
                 name="transporterPhoneNumber"
                 onChange={handleChange}
               />
             </div>
             <Input
               size="lg"
-              label="Company Representative Name"
+              label="Items Collected"
               type="text"
               name="representative"
               onChange={handleChange}
@@ -541,6 +555,15 @@ function App() {
           </div>
         </div>
         <SignPad state={state} setState={setState} />
+        <div className="flex items-start gap-2">
+          <Checkbox id="agree" />
+          <label htmlFor="agree" className="text-zinc-800">
+            I certify that the contents of this shipment are fully and
+            accurately described, labeled and are in proper condition for
+            transportation according to the applicable state and federal
+            regulations.
+          </label>
+        </div>
 
         <Button type="submit" variant="gradient">
           Submit
