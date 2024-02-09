@@ -6,8 +6,9 @@ import {
   Typography,
   Checkbox,
 } from "@material-tailwind/react";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import SignPad from "./components/Signpad";
+import { Sidebar } from "./components/Sidebar";
 
 const Clients = [
   {
@@ -345,13 +346,14 @@ function App() {
     phoneNumber: "",
     generalDate: "",
     sign: "",
-    companyName: '',
+    companyName: "",
     representative: "",
     transporterName: "",
     transporterAddress: "7600 SE Johnson Creek Blvd, Portland, OR 97206",
     transporterPhoneNumber: "503-477-8765",
     transporterDate: "",
   });
+  const [data, setData] = useState([])
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -361,11 +363,27 @@ function App() {
     });
   };
 
+  const fetchData = useCallback(async () => {
+    const resp =await fetch(`${process.env.REACT_APP_API_DOMAIN}/api/data`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+
+    const json = await resp.json()
+    setData(json.data)
+  }, []);
+
+  useEffect(() => {
+    fetchData()
+  }, [fetchData]);
+
   const handleChangeClient = (value) => {
     const selected = Clients.find((item) => item.Client === value);
     setState({
       ...state,
-      client: selected["Client"],
       email: selected["Email"],
       phoneNumber: selected["Phone Number"],
       address: selected["Address"],
@@ -384,191 +402,204 @@ function App() {
       body: JSON.stringify(state),
     });
     alert("Email sent successfully");
+    fetchData()
   };
 
+  const max = data?.reduce((prev, current) => {
+    return (prev.referenceNumber > current.referenceNumber) ? prev : current;
+  }, 0);
+
   return (
-    <div className="h-screen w-full flex flex-col items-center justify-between max-w-5xl mx-auto">
-      <form
-        onSubmit={handleSubmit}
-        className="flex w-full flex-col gap-6 p-3 md:p-8"
-      >
-        <Typography variant="h3" className="leading-none">
-          Regulated Medical Waste Manifest
-        </Typography>
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="w-full flex-1">
-            <Typography variant="h5" className="pb-2">
-              Generator Information
+    <div className="flex gap-4 bg-gray-50">
+      <Sidebar data={data}/>
+      <div className="h-full  flex flex-col items-center justify-between mx-auto">
+        <form
+          onSubmit={handleSubmit}
+          className="flex w-full flex-col gap-6 p-3 md:p-8"
+        >
+          <div className="flex items-center justify-between">
+            <Typography variant="h3" className="leading-none">
+              Regulated Medical Waste Manifest
             </Typography>
-            <Select
-              size="lg"
-              name="client"
-              onChange={(value) => handleChangeClient(value)}
-              label="Select Client"
-            >
-              {Clients.map((item) => (
-                <Option key={item.Client} value={item.Client}>
-                  {item.Client}
-                </Option>
-              ))}
-            </Select>
-            <div className="flex gap-4 my-4">
-              <Input
-                size="lg"
-                label="Add Client"
-                name="client"
-                containerProps={{
-                  className: "!min-w-0",
-                }}
-                value={state.client}
-                onChange={handleChange}
-              />
-              <Input
-                size="lg"
-                label="Date"
-                type="date"
-                containerProps={{
-                  className: "!min-w-0",
-                }}
-                value={state.generalDate}
-                name="generalDate"
-                onChange={handleChange}
-              />
-            </div>
-            <div className="w-full flex gap-4 my-4">
-              <Input
-                size="lg"
-                label="Address"
-                value={state.address}
-                name="address"
-                containerProps={{
-                  className: "!min-w-0",
-                }}
-                onChange={handleChange}
-              />
-              <Input
-                size="lg"
-                label="Telephone"
-                value={state.phoneNumber}
-                type="text"
-                containerProps={{
-                  className: "!min-w-0",
-                }}
-                name="telephone"
-                onChange={handleChange}
-              />
-            </div>
-            <div className="w-full flex gap-4 mt-4">
-              <Input
-                size="lg"
-                label="Company"
-                name="company"
-                containerProps={{
-                  className: "!min-w-0",
-                }}
-                onChange={handleChange}
-              />
-              <Input
-                size="lg"
-                value={state.email}
-                label="Email"
-                containerProps={{
-                  className: "!min-w-0",
-                }}
-                type="email"
-                name="email"
-                onChange={handleChange}
-              />
-            </div>
+            <Typography>Ref #: {max?.referenceNumber+1}</Typography>
           </div>
-          <div className="w-full flex-1">
-            <Typography variant="h5" className="pb-2">
-              Transporter Information
-            </Typography>
-            <div className="w-full flex gap-4 mb-4">
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="w-full flex-1">
+              <Typography variant="h5" className="pb-2">
+                Generator Information
+              </Typography>
               <Select
-              label="Company"
-                onChange={(value) =>
-                  setState({
-                    ...state,
-                    companyName: value,
-                  })
-                }
+                size="lg"
+                name="client"
+                onChange={(value) => handleChangeClient(value)}
+                label="Select Client"
               >
-                {["Synergy Environmental", "Rapid Response Bio Clean"].map((item) => (
-                  <Option key={item} value={item}>
-                    {item}
+                {Clients.map((item) => (
+                  <Option key={item.Client} value={item.Client}>
+                    {item.Client}
                   </Option>
                 ))}
               </Select>
-              <Input
-                size="lg"
-                containerProps={{
-                  className: "!min-w-0",
-                }}
-                label="Date"
-                type="date"
-                name="representativeDate"
-                onChange={handleChange}
-              />
+              <div className="flex gap-4 my-4">
+                <Input
+                  size="lg"
+                  label="Date"
+                  type="date"
+                  containerProps={{
+                    className: "!min-w-0",
+                  }}
+                  value={state.generalDate}
+                  name="generalDate"
+                  onChange={handleChange}
+                />
+                <Input
+                  size="lg"
+                  label="Address"
+                  value={state.address}
+                  name="address"
+                  containerProps={{
+                    className: "!min-w-0",
+                  }}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="w-full flex gap-4 my-4">
+                <Input
+                  size="lg"
+                  label="Company"
+                  name="company"
+                  containerProps={{
+                    className: "!min-w-0",
+                  }}
+                  onChange={handleChange}
+                />
+                <Input
+                  size="lg"
+                  label="Telephone"
+                  value={state.phoneNumber}
+                  type="text"
+                  containerProps={{
+                    className: "!min-w-0",
+                  }}
+                  name="phoneNumber"
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="w-full flex gap-4 mt-4">
+                <Input
+                  size="lg"
+                  label="Add Client"
+                  name="client"
+                  containerProps={{
+                    className: "!min-w-0",
+                  }}
+                  value={state.client}
+                  onChange={handleChange}
+                />
+                <Input
+                  size="lg"
+                  value={state.email}
+                  label="Email"
+                  containerProps={{
+                    className: "!min-w-0",
+                  }}
+                  type="email"
+                  name="email"
+                  onChange={handleChange}
+                />
+              </div>
             </div>
-            <Input
-              size="lg"
-              label="Name of Person Collection Information"
-              type="text"
-              containerProps={{
-                className: "!min-w-0",
-              }}
-              name="transporterName"
-              onChange={handleChange}
-            />
-            <div className="w-full flex gap-4 my-4">
+            <div className="w-full flex-1">
+              <Typography variant="h5" className="pb-2">
+                Transporter Information
+              </Typography>
+              <div className="w-full flex gap-4 mb-4">
+                <Select
+                  label="Company"
+                  onChange={(value) =>
+                    setState({
+                      ...state,
+                      companyName: value,
+                    })
+                  }
+                >
+                  {["Synergy Environmental", "Rapid Response Bio Clean"].map(
+                    (item) => (
+                      <Option key={item} value={item}>
+                        {item}
+                      </Option>
+                    )
+                  )}
+                </Select>
+                <Input
+                  size="lg"
+                  containerProps={{
+                    className: "!min-w-0",
+                  }}
+                  label="Date"
+                  type="date"
+                  name="representativeDate"
+                  onChange={handleChange}
+                />
+              </div>
               <Input
                 size="lg"
-                label="Address"
-                containerProps={{
-                  className: "!min-w-0",
-                }}
-                value={state.transporterAddress}
-                name="transporterAddress"
-                onChange={handleChange}
-              />
-              <Input
-                size="lg"
-                label="Telephone"
-                containerProps={{
-                  className: "!min-w-0",
-                }}
+                label="Name of Person Collection Information"
                 type="text"
-                value={state.transporterPhoneNumber}
-                name="transporterPhoneNumber"
+                containerProps={{
+                  className: "!min-w-0",
+                }}
+                name="transporterName"
+                onChange={handleChange}
+              />
+              <div className="w-full flex gap-4 my-4">
+                <Input
+                  size="lg"
+                  label="Address"
+                  containerProps={{
+                    className: "!min-w-0",
+                  }}
+                  value={state.transporterAddress}
+                  name="transporterAddress"
+                  onChange={handleChange}
+                />
+                <Input
+                  size="lg"
+                  label="Telephone"
+                  containerProps={{
+                    className: "!min-w-0",
+                  }}
+                  type="text"
+                  value={state.transporterPhoneNumber}
+                  name="transporterPhoneNumber"
+                  onChange={handleChange}
+                />
+              </div>
+              <Input
+                size="lg"
+                label="Items Collected"
+                type="text"
+                name="representative"
                 onChange={handleChange}
               />
             </div>
-            <Input
-              size="lg"
-              label="Items Collected"
-              type="text"
-              name="representative"
-              onChange={handleChange}
-            />
           </div>
-        </div>
-        <SignPad state={state} setState={setState} />
-        <div className="flex items-start gap-2">
-          <Checkbox id="agree" />
-          <label htmlFor="agree" className="text-zinc-800">
-            I certify that the contents of this shipment are fully and
-            accurately described, labeled and are in proper condition for
-            transportation according to the applicable state and federal
-            regulations.
-          </label>
-        </div>
+          <SignPad state={state} setState={setState} />
+          <div className="flex items-start gap-2">
+            <Checkbox id="agree" />
+            <label htmlFor="agree" className="text-zinc-800">
+              I certify that the contents of this shipment are fully and
+              accurately described, labeled and are in proper condition for
+              transportation according to the applicable state and federal
+              regulations.
+            </label>
+          </div>
 
-        <Button type="submit" variant="gradient">
-          Submit
-        </Button>
-      </form>
+          <Button type="submit" variant="gradient">
+            Submit
+          </Button>
+        </form>
+      </div>
     </div>
   );
 }

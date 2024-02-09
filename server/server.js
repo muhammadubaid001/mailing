@@ -1,4 +1,5 @@
 const { app } = require("./src/app")
+require("./src/config/database")()
 
 const PORT = process.env.PORT || 5000
 

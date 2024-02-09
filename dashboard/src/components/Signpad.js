@@ -19,7 +19,7 @@ class SignPad extends Component {
     });
     this.props.setState({
       ...this.props.state,
-      image: this.sigPad.getTrimmedCanvas().toDataURL("image/png"),
+      sign: this.sigPad.getTrimmedCanvas().toDataURL("image/png"),
     });
   };
   render() {
