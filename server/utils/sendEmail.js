@@ -1,10 +1,27 @@
 const nodeMailer = require("nodemailer");
 const path = require("path");
 
-const sendEmail = async ({ email, subject, message }) => {
+const sendEmail = async ({ email, subject, message, data }) => {
   const output = `
         <div>
-            <h1>Thank you</h1>
+            <h1>General Information</h1>
+
+    <p>Client: ${data.client}</p>
+    <p>Email: ${data.email}</p>
+    <p>Address: ${data.address}</p>
+    <p>Phone: ${data.phoneNumber}</p>
+    <p>Date: ${data.generalDate}</p>
+
+    <h1>Transporter Information</h1>
+    <p>Company: ${data.companyName}</p>
+    <p>Items Collected: ${data.representative}</p>
+    <p>Name: ${data.transporterName}</p>
+    <p>Address: ${data.transporterAddress}</p>
+    <p>Phone: ${data.transporterPhoneNumber}</p>
+    <p>Date: ${data.transporterDate}</p>
+
+    <h1>Sign: </h1>
+    <img src=${data.sign} />
         </div>
     `;
 
@@ -24,14 +41,14 @@ const sendEmail = async ({ email, subject, message }) => {
     host: process.env.SMTP_HOST, //"smtp.gmail.com"
     port: 465,
     auth: {
-      user: process.env.SMTP_MAIL, 
-      pass: process.env.SMTP_PASSWORD, 
+      user: process.env.SMTP_MAIL,
+      pass: process.env.SMTP_PASSWORD,
     },
   });
 
   const mailOptions = {
     from: {
-      name: "Ubaid",
+      name: "RRBC",
       address: process.env.SMTP_MAIL,
     },
     to: email,

@@ -364,7 +364,7 @@ function App() {
   };
 
   const fetchData = useCallback(async () => {
-    const resp =await fetch(`${process.env.REACT_APP_API_DOMAIN}/api/data`, {
+    const resp = await fetch(`${process.env.REACT_APP_API_DOMAIN}/api/data`, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -467,7 +467,7 @@ function App() {
                 <Input
                   size="lg"
                   label="Company"
-                  name="company"
+                  name="companyName"
                   containerProps={{
                     className: "!min-w-0",
                   }}

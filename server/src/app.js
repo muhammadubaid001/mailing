@@ -3,8 +3,6 @@ const app = express();
 const path = require("path");
 const router = require("express").Router();
 const cors = require("cors");
-const fs = require("fs");
-const mime = require("mime");
 const cookieParser = require("cookie-parser");
 const sendEmail = require("../utils/sendEmail");
 const { Data } = require("./models/DataModel");
@@ -53,7 +51,6 @@ app.use(
   "/api/",
   router.post("/send", async (req, res, next) => {
     try {
-      console.log(req.body);
       const referenceNumber = await getNextReferenceNumber();
 
       // response.type = matches[1];
@@ -73,6 +70,7 @@ app.use(
         email: req.body.email,
         subject: "Please do not reply to this email",
         message: "noreply",
+        data: req.body
       });
 
       res.status(200).send({
