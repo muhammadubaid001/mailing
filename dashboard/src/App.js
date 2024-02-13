@@ -345,6 +345,7 @@ function App() {
     address: "",
     phoneNumber: "",
     generalDate: "",
+    company: '',
     sign: "",
     companyName: "",
     representative: "",
@@ -353,6 +354,7 @@ function App() {
     transporterPhoneNumber: "503-477-8765",
     transporterDate: "",
   });
+  const [referenceNumber, setReferenceNumber] = useState(null)
   const [data, setData] = useState([])
 
   const handleChange = (e) => {
@@ -409,9 +411,11 @@ function App() {
     return (prev.referenceNumber > current.referenceNumber) ? prev : current;
   }, 0);
 
+  const filteredData = data.filter(item => !referenceNumber ? data :  item.referenceNumber?.toString().includes(referenceNumber?.toString()))
+
   return (
     <div className="flex gap-4 bg-gray-50">
-      <Sidebar data={data}/>
+      <Sidebar data={filteredData} referenceNumber={referenceNumber} setReferenceNumber={setReferenceNumber} state={state} setState={setState} />
       <div className="h-full  flex flex-col items-center justify-between mx-auto">
         <form
           onSubmit={handleSubmit}
@@ -467,7 +471,8 @@ function App() {
                 <Input
                   size="lg"
                   label="Company"
-                  name="companyName"
+                  name="company"
+                  value={state.companyName}
                   containerProps={{
                     className: "!min-w-0",
                   }}
@@ -516,10 +521,12 @@ function App() {
               <div className="w-full flex gap-4 mb-4">
                 <Select
                   label="Company"
+                  value={state.companyName}
                   onChange={(value) =>
                     setState({
                       ...state,
                       companyName: value,
+                      company: value,
                     })
                   }
                 >
@@ -580,6 +587,7 @@ function App() {
                 label="Items Collected"
                 type="text"
                 name="representative"
+                value={state.representative}
                 onChange={handleChange}
               />
             </div>

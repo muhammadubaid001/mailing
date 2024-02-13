@@ -23,7 +23,6 @@ class SignPad extends Component {
     });
   };
   render() {
-    const { trimmedDataURL } = this.state;
     return (
       <Fragment>
         <div className="h-60 w-full overflow-hidden shadow-sm border border-gray-400 rounded-xl">
@@ -38,10 +37,10 @@ class SignPad extends Component {
         </div>
 
         <div className="flex items-start gap-2">
-          {trimmedDataURL ? (
+          {this.props.state.sign ? (
             <img
               className="h-44 w-44 object-contain"
-              src={trimmedDataURL}
+              src={this.props.state.sign}
               alt=""
             />
           ) : null}
