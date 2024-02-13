@@ -472,7 +472,7 @@ function App() {
                   size="lg"
                   label="Company"
                   name="company"
-                  value={state.companyName}
+                  value={state.company}
                   containerProps={{
                     className: "!min-w-0",
                   }}
