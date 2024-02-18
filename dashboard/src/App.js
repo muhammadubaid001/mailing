@@ -345,7 +345,7 @@ function App() {
     address: "",
     phoneNumber: "",
     generalDate: "",
-    company: '',
+    company: "",
     sign: "",
     companyName: "",
     representative: "",
@@ -354,8 +354,9 @@ function App() {
     transporterPhoneNumber: "503-477-8765",
     transporterDate: "",
   });
-  const [referenceNumber, setReferenceNumber] = useState(null)
-  const [data, setData] = useState([])
+  const [referenceNumber, setReferenceNumber] = useState(null);
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false)
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -374,12 +375,12 @@ function App() {
       },
     });
 
-    const json = await resp.json()
-    setData(json.data)
+    const json = await resp.json();
+    setData(json.data);
   }, []);
 
   useEffect(() => {
-    fetchData()
+    fetchData();
   }, [fetchData]);
 
   const handleChangeClient = (value) => {
@@ -394,7 +395,7 @@ function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     await fetch(`${process.env.REACT_APP_API_DOMAIN}/api/send`, {
       method: "POST",
       headers: {
@@ -404,19 +405,30 @@ function App() {
       body: JSON.stringify(state),
     });
     alert("Email sent successfully");
-    fetchData()
+    fetchData();
+    setLoading(false)
   };
 
   const max = data?.reduce((prev, current) => {
-    return (prev.referenceNumber > current.referenceNumber) ? prev : current;
+    return prev.referenceNumber > current.referenceNumber ? prev : current;
   }, 0);
 
-  const filteredData = data.filter(item => !referenceNumber ? data :  item.referenceNumber?.toString().includes(referenceNumber?.toString()))
+  const filteredData = data.filter((item) =>
+    !referenceNumber
+      ? data
+      : item.referenceNumber?.toString().includes(referenceNumber?.toString())
+  );
 
   return (
     <div className="flex gap-4 bg-gray-50">
-      <Sidebar data={filteredData} referenceNumber={referenceNumber} setReferenceNumber={setReferenceNumber} state={state} setState={setState} />
-      <div className="h-full  flex flex-col items-center justify-between mx-auto">
+      <Sidebar
+        data={filteredData}
+        referenceNumber={referenceNumber}
+        setReferenceNumber={setReferenceNumber}
+        state={state}
+        setState={setState}
+      />
+      <div className="h-full flex flex-col items-center justify-between mx-auto">
         <form
           onSubmit={handleSubmit}
           className="flex w-full flex-col gap-6 p-3 md:p-8"
@@ -425,7 +437,7 @@ function App() {
             <Typography variant="h3" className="leading-none">
               Regulated Medical Waste Manifest
             </Typography>
-            <Typography>Ref #: {max?.referenceNumber+1}</Typography>
+            <Typography>Ref #: {max?.referenceNumber + 1}</Typography>
           </div>
           <div className="flex flex-col md:flex-row gap-4">
             <div className="w-full flex-1">
@@ -603,8 +615,8 @@ function App() {
             </label>
           </div>
 
-          <Button type="submit" variant="gradient">
-            Submit
+          <Button disabled={loading} type="submit" variant="gradient">
+            {loading ? 'Loading...' : "Submit"}
           </Button>
         </form>
       </div>

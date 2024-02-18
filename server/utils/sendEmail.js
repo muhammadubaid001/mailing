@@ -1,7 +1,7 @@
 const nodeMailer = require("nodemailer");
 const path = require("path");
 
-const sendEmail = async ({ email, subject, message, data }) => {
+const sendEmail = async ({ email, subject, message, data, id }) => {
   const output = `
         <div>
             <h1>General Information</h1>
@@ -19,9 +19,6 @@ const sendEmail = async ({ email, subject, message, data }) => {
     <p>Address: ${data.transporterAddress}</p>
     <p>Phone: ${data.transporterPhoneNumber}</p>
     <p>Date: ${data.transporterDate}</p>
-
-    <h1>Sign: </h1>
-    <img src=${data.sign} />
         </div>
     `;
 
@@ -55,12 +52,12 @@ const sendEmail = async ({ email, subject, message, data }) => {
     subject,
     text: message,
     html: output,
-    // attachments: [
-    //   {
-    //     filename: "sign.png",
-    //     path: path.join(__dirname, "..", "/public/sign.png"),
-    //   },
-    // ],
+    attachments: [
+      {
+        filename: "sign.png",
+        path: path.join(__dirname, "..", `/public/${id}.png`),
+      },
+    ],
   };
 
   await transporter.sendMail(mailOptions);

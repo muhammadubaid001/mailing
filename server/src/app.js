@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const router = require("express").Router();
+const fs = require("fs");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const sendEmail = require("../utils/sendEmail");
@@ -62,15 +63,26 @@ app.use(
       // let fileName = "image." + extension;
       // fs.writeFileSync("./images/" + fileName, imageBuffer, "utf8");
 
+      const base64Data = req.body.sign.replace(/^data:image\/\w+;base64,/, "");
+      const buffer = Buffer.from(base64Data, "base64");
+
       const data = await Data.create({
         referenceNumber,
         ...req.body,
       });
+
+      fs.writeFile(`public/${data._id}.png`, buffer, (err) => {
+        if (err) {
+          console.log(err);
+        }
+      });
+
       await sendEmail({
         email: req.body.email,
         subject: "Please do not reply to this email",
         message: "noreply",
-        data: req.body
+        data: req.body,
+        id: data._id
       });
 
       res.status(200).send({
@@ -79,7 +91,8 @@ app.use(
         data,
       });
     } catch (error) {
-      res.status(500).send({ message: error.message });
+      console.log(error);
+      res.status(500).send({ message: error });
     }
   })
 );
