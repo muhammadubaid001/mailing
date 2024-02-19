@@ -9,6 +9,8 @@ import {
 import { useCallback, useEffect, useState } from "react";
 import SignPad from "./components/Signpad";
 import { Sidebar } from "./components/Sidebar";
+import { PDFFile } from "./components/PDFFile";
+import { PDFDownloadLink } from "@react-pdf/renderer";
 
 const Clients = [
   {
@@ -356,7 +358,7 @@ function App() {
   });
   const [referenceNumber, setReferenceNumber] = useState(null);
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -406,7 +408,7 @@ function App() {
     });
     alert("Email sent successfully");
     fetchData();
-    setLoading(false)
+    setLoading(false);
   };
 
   const max = data?.reduce((prev, current) => {
@@ -428,6 +430,7 @@ function App() {
         state={state}
         setState={setState}
       />
+
       <div className="h-full flex flex-col items-center justify-between mx-auto">
         <form
           onSubmit={handleSubmit}
@@ -437,7 +440,32 @@ function App() {
             <Typography variant="h3" className="leading-none">
               Regulated Medical Waste Manifest
             </Typography>
-            <Typography>Ref #: {max?.referenceNumber + 1}</Typography>
+            <div className="flex gap-2 items-center">
+              <Typography>Ref #: {max?.referenceNumber + 1}</Typography>
+              <PDFDownloadLink document={<PDFFile data={state} />} fileName="file">
+                <Button
+                  color="green"
+                  variant="gradient"
+                  className="flex gap-2 items-center"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-4 h-4"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"
+                    />
+                  </svg>
+                  Export PDF
+                </Button>
+              </PDFDownloadLink>
+            </div>
           </div>
           <div className="flex flex-col md:flex-row gap-4">
             <div className="w-full flex-1">
@@ -616,7 +644,7 @@ function App() {
           </div>
 
           <Button disabled={loading} type="submit" variant="gradient">
-            {loading ? 'Loading...' : "Submit"}
+            {loading ? "Loading..." : "Submit"}
           </Button>
         </form>
       </div>
