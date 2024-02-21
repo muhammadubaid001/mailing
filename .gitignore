@@ -3,7 +3,7 @@
 # dependencies
 server/node_modules
 dashboard/node_modules
-dashboard/build
+
 /.pnp
 .pnp.js
 
