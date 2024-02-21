@@ -17,7 +17,8 @@ class SignPad extends Component {
     this.setState({
       trimmedDataURL: this.sigPad.getTrimmedCanvas().toDataURL("image/png"),
     });
-    // const file = new File([this.state.trimmedDataURL], 'sign.png', { type: 'image/png' });
+    const file = new File([this.state.trimmedDataURL], 'sign.png', { type: 'image/png' });
+    console.log({ file })
     this.props.setState({
       ...this.props.state,
       sign: this.sigPad.getTrimmedCanvas().toDataURL("image/png"),

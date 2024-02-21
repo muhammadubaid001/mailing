@@ -15,6 +15,10 @@ export const PDFFile = ({ data }) => {
   return (
     <Document>
       <Page style={styles.body}>
+
+
+
+        
         <Text>General Information</Text>
         <Text style={styles.text}>Client {data.client}</Text>
         <Text style={styles.text}>Email: {data.email}</Text>
