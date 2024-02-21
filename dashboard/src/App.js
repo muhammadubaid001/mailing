@@ -6,6 +6,7 @@ import {
   Typography,
   Checkbox,
 } from "@material-tailwind/react";
+import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
 import SignPad from "./components/Signpad";
 import { Sidebar } from "./components/Sidebar";
@@ -367,16 +368,10 @@ function App() {
   };
 
   const fetchData = useCallback(async () => {
-    const resp = await fetch(`${process.env.REACT_APP_API_DOMAIN}/api/data`, {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    });
-
-    const json = await resp.json();
-    setData(json.data);
+    const resp = await axios.get(
+      `${process.env.REACT_APP_API_DOMAIN}/api/data`
+    );
+    setData(resp.data.data);
   }, []);
 
   useEffect(() => {
@@ -396,14 +391,7 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    await fetch(`${process.env.REACT_APP_API_DOMAIN}/api/send`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(state),
-    });
+    await axios.post(`${process.env.REACT_APP_API_DOMAIN}/api/send`, state);
     alert("Email sent successfully");
     fetchData();
     setLoading(false);
@@ -441,27 +429,27 @@ function App() {
             <div className="flex gap-2 items-center">
               <Typography>Ref #: {max?.referenceNumber + 1}</Typography>
               {/* <PDFDownloadLink document={<PDFFile data={state} />} fileName="file"> */}
-                <Button
-                  color="green"
-                  variant="gradient"
-                  className="flex gap-2 items-center"
+              <Button
+                color="green"
+                variant="gradient"
+                className="flex gap-2 items-center"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-4 h-4"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-4 h-4"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"
-                    />
-                  </svg>
-                  Export PDF
-                </Button>
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"
+                  />
+                </svg>
+                Export PDF
+              </Button>
               {/* </PDFDownloadLink> */}
             </div>
           </div>
