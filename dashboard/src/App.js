@@ -9,8 +9,6 @@ import {
 import { useCallback, useEffect, useState } from "react";
 import SignPad from "./components/Signpad";
 import { Sidebar } from "./components/Sidebar";
-import { PDFFile } from "./components/PDFFile";
-import { PDFDownloadLink } from "@react-pdf/renderer";
 
 const Clients = [
   {
@@ -442,7 +440,7 @@ function App() {
             </Typography>
             <div className="flex gap-2 items-center">
               <Typography>Ref #: {max?.referenceNumber + 1}</Typography>
-              <PDFDownloadLink document={<PDFFile data={state} />} fileName="file">
+              {/* <PDFDownloadLink document={<PDFFile data={state} />} fileName="file"> */}
                 <Button
                   color="green"
                   variant="gradient"
@@ -464,7 +462,7 @@ function App() {
                   </svg>
                   Export PDF
                 </Button>
-              </PDFDownloadLink>
+              {/* </PDFDownloadLink> */}
             </div>
           </div>
           <div className="flex flex-col md:flex-row gap-4">
