@@ -1,9 +1,9 @@
 import React from "react";
 
-export const PDFFile = ({ data }) => {
+export const PDFFile = ({ targetRef, data }) => {
   return (
-    <div>
-        d
+    <div className="hidden" ref={targetRef}>
+      dsdfsdf
     </div>
   );
 };

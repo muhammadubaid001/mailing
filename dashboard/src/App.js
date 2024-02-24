@@ -7,9 +7,11 @@ import {
   Checkbox,
 } from "@material-tailwind/react";
 import axios from "axios";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import SignPad from "./components/Signpad";
 import { Sidebar } from "./components/Sidebar";
+import generatePDF from 'react-to-pdf';
+import { PDFFile } from "./components/PDFFile";
 
 const Clients = [
   {
@@ -382,6 +384,7 @@ function App() {
     const selected = Clients.find((item) => item.Client === value);
     setState({
       ...state,
+      client: selected['Client'],
       email: selected["Email"],
       phoneNumber: selected["Phone Number"],
       address: selected["Address"],
@@ -429,11 +432,16 @@ function App() {
             <div className="flex gap-2 items-center">
               <Typography>Ref #: {max?.referenceNumber + 1}</Typography>
               {/* <PDFDownloadLink document={<PDFFile data={state} />} fileName="file"> */}
-              <Button
+              {/* <Button
                 color="green"
                 variant="gradient"
+                onClick={() => generatePDF(targetRef, {
+                  filename: "file.pdf",
+                })}
                 className="flex gap-2 items-center"
               >
+
+
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -449,7 +457,7 @@ function App() {
                   />
                 </svg>
                 Export PDF
-              </Button>
+              </Button> */}
               {/* </PDFDownloadLink> */}
             </div>
           </div>
@@ -494,16 +502,6 @@ function App() {
                 />
               </div>
               <div className="w-full flex gap-4 my-4">
-                <Input
-                  size="lg"
-                  label="Company"
-                  name="company"
-                  value={state.company}
-                  containerProps={{
-                    className: "!min-w-0",
-                  }}
-                  onChange={handleChange}
-                />
                 <Input
                   size="lg"
                   label="Telephone"

@@ -4,21 +4,20 @@ const path = require("path");
 const sendEmail = async ({ email, subject, message, data, id }) => {
   const output = `
         <div>
-            <h1>General Information</h1>
+            <h1>Generator Information</h1>
+            <p>Client: ${data.client}</p>
+            <p>Email: ${data.email}</p>
+            <p>Address: ${data.address}</p>
+            <p>Phone: ${data.phoneNumber}</p>
+            <p>Date: ${data.generalDate}</p>
 
-    <p>Client: ${data.client}</p>
-    <p>Email: ${data.email}</p>
-    <p>Address: ${data.address}</p>
-    <p>Phone: ${data.phoneNumber}</p>
-    <p>Date: ${data.generalDate}</p>
-
-    <h1>Transporter Information</h1>
-    <p>Company: ${data.companyName}</p>
-    <p>Items Collected: ${data.representative}</p>
-    <p>Name: ${data.transporterName}</p>
-    <p>Address: ${data.transporterAddress}</p>
-    <p>Phone: ${data.transporterPhoneNumber}</p>
-    <p>Date: ${data.transporterDate}</p>
+            <h1>Transporter Information</h1>
+            <p>Company: ${data.companyName}</p>
+            <p>Items Collected: ${data.representative}</p>
+            <p>Name: ${data.transporterName}</p>
+            <p>Address: ${data.transporterAddress}</p>
+            <p>Phone: ${data.transporterPhoneNumber}</p>
+            <p>Date: ${data.transporterDate}</p>
         </div>
     `;
 
@@ -31,6 +30,8 @@ const sendEmail = async ({ email, subject, message, data, id }) => {
   //         pass: process.env.SMTP_PASSWORD
   //     }
   // })
+
+  console.log(subject)
 
   // For Mailtrap
   const transporter = nodeMailer.createTransport({

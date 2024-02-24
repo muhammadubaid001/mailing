@@ -17,6 +17,7 @@ dashboard/node_modules
 .DS_Store
 server/.env
 server/dropo.drawio
+server/public
 dashboard/.env.local
 dashboard/.env
 .env.development.local
