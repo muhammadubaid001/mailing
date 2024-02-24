@@ -7,11 +7,9 @@ import {
   Checkbox,
 } from "@material-tailwind/react";
 import axios from "axios";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import SignPad from "./components/Signpad";
 import { Sidebar } from "./components/Sidebar";
-import generatePDF from 'react-to-pdf';
-import { PDFFile } from "./components/PDFFile";
 
 const Clients = [
   {
