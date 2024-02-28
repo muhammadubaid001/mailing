@@ -382,7 +382,7 @@ function App() {
     const selected = Clients.find((item) => item.Client === value);
     setState({
       ...state,
-      client: selected['Client'],
+      client: selected["Client"],
       email: selected["Email"],
       phoneNumber: selected["Phone Number"],
       address: selected["Address"],
@@ -392,10 +392,15 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    await axios.post(`${process.env.REACT_APP_API_DOMAIN}/api/send`, state);
-    alert("Email sent successfully");
-    fetchData();
-    setLoading(false);
+    try {
+      await axios.post(`${process.env.REACT_APP_API_DOMAIN}/api/send`, state);
+      fetchData();
+      alert("Email sent successfully");
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const max = data?.reduce((prev, current) => {
@@ -567,7 +572,7 @@ function App() {
                   }}
                   label="Date"
                   type="date"
-                  name="representativeDate"
+                  name="transporterDate"
                   onChange={handleChange}
                 />
               </div>

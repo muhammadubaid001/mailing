@@ -2,7 +2,10 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const router = require("express").Router();
-const fs = require("fs");
+
+const buffer = require('buffer');
+const fs = require('fs');
+
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const sendEmail = require("../utils/sendEmail");
@@ -71,9 +74,19 @@ app.use(
         ...req.body,
       });
 
-      fs.writeFile(`public/${data._id}.png`, buffer, (err) => {
-        if (err) {
-          console.log(err);
+      // fs.writeFile(`public/${data._id}.jpg`, buffer, (err) => {
+      //   if (err) {
+      //     console.log(err);
+      //   }
+      // });
+
+
+      fs.writeFile(path.join(__dirname,'..',`/public/${data._id}.PNG`), buffer, function(error){
+        if(error){
+          throw error;
+        }else{
+          console.log('File created from base64 string!');
+          return true;
         }
       });
 
@@ -82,6 +95,7 @@ app.use(
         subject: `Ref #: ${referenceNumber}`,
         message: "noreply",
         data: req.body,
+        buffer,
         id: data._id
       });
 
