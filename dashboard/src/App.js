@@ -413,6 +413,7 @@ function App() {
       : item.referenceNumber?.toString().includes(referenceNumber?.toString())
   );
 
+  
   return (
     <div className="flex gap-4 bg-gray-50">
       <Sidebar
@@ -619,17 +620,13 @@ function App() {
               />
             </div>
           </div>
-          <SignPad state={state} setState={setState} />
           <div className="flex items-start gap-2">
             <Checkbox id="agree" />
             <label htmlFor="agree" className="text-zinc-800">
-              I certify that the contents of this shipment are fully and
-              accurately described, labeled and are in proper condition for
-              transportation according to the applicable state and federal
-              regulations.
+            I certify that the contents of this shipment are fully and accurately described, labeled and are in proper condition for transportation according to the applicable state and federal regulations.
             </label>
           </div>
-
+          <SignPad state={state} setState={setState} />
           <Button disabled={loading} type="submit" variant="gradient">
             {loading ? "Loading..." : "Submit"}
           </Button>
