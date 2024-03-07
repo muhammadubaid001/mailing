@@ -11,6 +11,13 @@ import { useCallback, useEffect, useState } from "react";
 import SignPad from "./components/Signpad";
 import { Sidebar } from "./components/Sidebar";
 
+
+
+
+
+
+
+
 const Clients = [
   {
     Client: "All Good NW - MSRV",
@@ -37,10 +44,10 @@ const Clients = [
     Email: "shannon@authentichealingpdx.com",
   },
   {
-    Client: "BHRC",
-    "Phone Number": "",
+    Client: "BHRC (Behavioral Health Resource Center)",
+    "Phone Number": "503-988-4100",
     Address: "333 SW Park Ave, Portland, OR 97205, USA",
-    Email: "",
+    Email: "cmhpreporting@multco.us",
   },
   {
     Client: "Cascade Medical Spa",
@@ -73,16 +80,10 @@ const Clients = [
     Email: "contactus@chinookfallsdental.com",
   },
   {
-    Client: "Creekside Rehabilitation ",
-    "Phone Number": "",
+    Client: "Creekside Rehabilitation (Sapphire at Belmont)",
+    "Phone Number": "503-236-2624 ext. 224",
     Address: "812 SE 48th Av, Portland, OR 97215, USA",
-    Email: "",
-  },
-  {
-    Client: "Do Good NW ",
-    "Phone Number": "254-217-3139",
-    Address: "8005 N Richmond Ave, Portland, OR 97203, USA",
-    Email: "",
+    Email: "spryor@sapphirehealthservices.com",
   },
   {
     Client: "Donald E. Long Juvenile Detention Center",
@@ -100,20 +101,16 @@ const Clients = [
     Client: "Evolve Aesthetics",
     "Phone Number": "360-726-4399",
     Address: "330 E Mill Plain Blvd suite 401, Vancouver, WA 98660, USA",
-    Email: '"',
+    Email: "sharla@evolvepdx.com",
   },
-  {
-    Client: 'sharla@evolvepdx.com"',
-  },
+
   {
     Client: "Evolve Health",
     "Phone Number": "503-447-3285",
     Address: "6400 SE Lake Rd suite 155, Portland, OR 97222, USA",
-    Email: '"',
+    Email: "accounting@evolvehealthus.com"
   },
-  {
-    Client: 'accounting@evolvehealthus.com"',
-  },
+
   {
     Client: "Faireys Pharmacy sharps pick up ",
     "Phone Number": "425-802-1891",
@@ -124,7 +121,7 @@ const Clients = [
     Client: "Gresham Pediatric Dentistry",
     "Phone Number": "503-761-2243",
     Address: "831 NW Council Dr #210, Gresham, OR 97030, USA",
-    Email: "",
+    Email: "info@greshampediatricdentistry.com",
   },
   {
     Client: "Inverness Jail ",
@@ -142,13 +139,13 @@ const Clients = [
     Client: "Kennedy Restoation",
     "Phone Number": "503-780-2102",
     Address: "13909 NE Airport Way, Portland, OR 97230",
-    Email: "",
+    Email: "AP@kennedyres.com",
   },
   {
     Client: "Laseraway Tualatin",
     "Phone Number": "",
     Address: "7459 SW Bridgeport Rd, Portland, OR 97224, USA",
-    Email: "",
+    Email: "Jenniferh@met-bio.com",
   },
   {
     Client: "Little Tattoo Shoppe ",
@@ -160,7 +157,7 @@ const Clients = [
     Client: "Market Street Shelter",
     "Phone Number": "971-804-6010",
     Address: "120 SE Market St, Portland, OR 97214, USA",
-    Email: "",
+    Email: "hmiller@allgoodnw.org",
   },
   {
     Client: "McMenamins Grand Lodge",
@@ -172,7 +169,7 @@ const Clients = [
     Client: "Mt Tabor Veterinary Clinic",
     "Phone Number": "503-200-5555",
     Address: "4246 SE Belmont St, Portland, OR 97215, USA",
-    Email: "",
+    Email: "pkunse@mttaborvetcare.com",
   },
   {
     Client: "New Rose Tattoo",
@@ -199,28 +196,17 @@ const Clients = [
     Email: "office@pdxdentistry.com",
   },
   {
-    Client: "Portland Building",
-    "Phone Number": "Full sharps container outside Suite #110",
-    Address: "420 SW Main St, Portland, OR 97204, USA",
-    Email: "",
-  },
-  {
     Client: "Portland Chiropractic Group",
     "Phone Number": "503-224-2100",
     Address: "2031 E Burnside, Portland OR 97214",
     Email: "shelley@portlandchiropracticgroup.com",
   },
-  {
-    Client: "Right to Dream 2",
-    "Phone Number": "",
-    Address: "999 N Thunderbird way",
-    Email: "",
-  },
+
   {
     Client: "Ritual Arts Sharps",
-    "Phone Number": "",
+    "Phone Number": "(503) 384-2551",
     Address: "2005 NE 42nd Ave #1304, Portland, OR 97213",
-    Email: "",
+    Email: "ritualartstattoo@gmail.com",
   },
   {
     Client: "Rosewater Tattoo",
@@ -261,14 +247,14 @@ const Clients = [
   },
   {
     Client: "Skin by Lovely - NW Portland",
-    "Phone Number": "",
-    Address: "",
+    "Phone Number": "(971) 303-8060",
+    Address: "2311 NW Northrup St. suite 100 Portland OR 97210",
     Email: "megan@skinbylovely.com",
   },
   {
     Client: "Skin by Lovely - Vancouver",
-    "Phone Number": "",
-    Address: "",
+    "Phone Number": "(877) 568-3594",
+    Address: "19120 SE 34th St Suite 202, Vancouver, WA 98683",
     Email: "mea@skinbylovely.com",
   },
   {
@@ -287,7 +273,7 @@ const Clients = [
     Client: "Strauss Dental Clinic",
     "Phone Number": "503-656-2139",
     Address: "802 Molalla Ave, Oregon City, OR 97045, USA",
-    Email: "",
+    Email: "admin@straussdental.com",
   },
   {
     Client: "Style Aesthetics",
@@ -299,7 +285,7 @@ const Clients = [
     Client: "Summit Reconstruction & Restoration",
     "Phone Number": "971-330-0293",
     Address: "7215 SW Bonita Rd, Tigard, OR 97224",
-    Email: "",
+    Email: "invoices@summitrecon.com",
   },
   {
     Client: "Terwilliger Plaza ",
@@ -323,7 +309,7 @@ const Clients = [
     Client: "True Diagnostics ",
     "Phone Number": "971-266-8989",
     Address: "1122 NE 122nd suite B102",
-    Email: "wayne@truediagnostics.org, cherie@truediagnostics.org",
+    Email: "wayne@truediagnostics.org",
   },
   {
     Client: "Warner Pacific University",
@@ -333,9 +319,9 @@ const Clients = [
   },
   {
     Client: "Wellness Mart",
-    "Phone Number": "",
+    "Phone Number": "(833) 944-3144",
     Address: "700 NE Multnomah, Suite 120 Portland, Oregon  97232",
-    Email: "",
+    Email: "accounting@wellness.com",
   },
 ];
 

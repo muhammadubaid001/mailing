@@ -36,7 +36,7 @@ app.use(
   "/api",
   router.get("/data", async (req, res, next) => {
     try {
-      const resp = await Data.find({});
+      const resp = await Data.find().sort({"createdAt": -1})
 
       res.status(200).json({
         success: true,

@@ -26,7 +26,7 @@ const sendEmail = async ({ email, subject, message, data, id, buffer }) => {
   // Create a new PDF document
   const doc = new PDFDocument();
 
-  const image = data?.companyName === "Synergy Environmental" ? path.join(__dirname, "..", "/public/PHOTO-2024-03-06-01-39-22.jpg") : path.join(__dirname, "..",  "/public/PHOTO-2024-03-06-01-39-23 2.jpg")
+  const image = data?.companyName === "Synergy Environmental" ? path.join(__dirname, "..", "/public/PHOTO-2024-03-06-01-39-22.jpg") : path.join(__dirname, "..",  "/public/PHOTO-2024-03-07-07-46-51.jpg")
   doc.image(
     image,
     {
@@ -79,7 +79,7 @@ const sendEmail = async ({ email, subject, message, data, id, buffer }) => {
   );
 
   doc.pipe(
-    fs.createWriteStream(path.join(__dirname, "..", `/public/${id}.pdf`))
+    fs.createWriteStream(path.join(__dirname, "..", `/public/${subject} - ${new Date().toISOString().slice(0, 10)}.pdf`))
   );
 
   // End the document
@@ -102,13 +102,14 @@ const sendEmail = async ({ email, subject, message, data, id, buffer }) => {
       address: process.env.SMTP_MAIL,
     },
     to: email,
+    cc: "ashley.j@rrbc-inc.com",
     subject,
     text: message,
     html: output,
     attachments: [
       {
-        filename: "output.pdf",
-        path: path.join(__dirname, "..", `/public/${id}.pdf`),
+        filename: `${subject} - ${new Date().toISOString().slice(0, 10)}.pdf`,
+        path: path.join(__dirname, "..", `/public/${subject} - ${new Date().toISOString().slice(0, 10)}.pdf`),
         contentType: "application/pdf",
       },
     ],
