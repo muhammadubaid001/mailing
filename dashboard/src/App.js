@@ -11,13 +11,6 @@ import { useCallback, useEffect, useState } from "react";
 import SignPad from "./components/Signpad";
 import { Sidebar } from "./components/Sidebar";
 
-
-
-
-
-
-
-
 const Clients = [
   {
     Client: "All Good NW - MSRV",
@@ -108,7 +101,7 @@ const Clients = [
     Client: "Evolve Health",
     "Phone Number": "503-447-3285",
     Address: "6400 SE Lake Rd suite 155, Portland, OR 97222, USA",
-    Email: "accounting@evolvehealthus.com"
+    Email: "accounting@evolvehealthus.com",
   },
 
   {
@@ -343,6 +336,7 @@ function App() {
   });
   const [referenceNumber, setReferenceNumber] = useState(null);
   const [data, setData] = useState([]);
+  const [isNew, setIsNew] = useState(false)
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
@@ -379,7 +373,7 @@ function App() {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post(`${process.env.REACT_APP_API_DOMAIN}/api/send`, state);
+      await axios.post(`${process.env.REACT_APP_API_DOMAIN}/api/send`, {...state, isNew});
       fetchData();
       alert("Email sent successfully");
     } catch (error) {
@@ -399,7 +393,6 @@ function App() {
       : item.referenceNumber?.toString().includes(referenceNumber?.toString())
   );
 
-  
   return (
     <div className="flex gap-4 bg-gray-50">
       <Sidebar
@@ -420,7 +413,12 @@ function App() {
               Regulated Medical Waste Manifest
             </Typography>
             <div className="flex gap-2 items-center">
-              <Typography>Ref #: {max?.referenceNumber + 1}</Typography>
+              <Typography>
+                Ref #:{" "}
+                {!isNew && state?.referenceNumber
+                  ? state?.referenceNumber
+                  : max?.referenceNumber + 1}
+              </Typography>
               {/* <PDFDownloadLink document={<PDFFile data={state} />} fileName="file"> */}
               {/* <Button
                 color="green"
@@ -453,11 +451,18 @@ function App() {
           </div>
           <div className="flex flex-col md:flex-row gap-4">
             <div className="w-full flex-1">
-              <Typography variant="h5" className="pb-2">
-                Generator Information
-              </Typography>
+              <div className="flex items-center justify-between">
+                <Typography variant="h5" className="pb-2">
+                  Generator Information
+                </Typography>
+                <label className="flex items-center text-gray-900 text-sm font-semibold">
+                  <Checkbox value={isNew} onChange={e => setIsNew(e.target.checked)} />
+                  New Client
+                </label>
+              </div>
               <Select
                 size="lg"
+                value={state.client}
                 name="client"
                 onChange={(value) => handleChangeClient(value)}
                 label="Select Client"
@@ -528,13 +533,14 @@ function App() {
                 />
               </div>
             </div>
-            <div className="w-full flex-1">
+            <div className="w-full flex-1 mt-2">
               <Typography variant="h5" className="pb-2">
                 Transporter Information
               </Typography>
               <div className="w-full flex gap-4 mb-4">
                 <Select
                   label="Company"
+                  size="lg"
                   value={state.companyName}
                   onChange={(value) =>
                     setState({
@@ -558,6 +564,7 @@ function App() {
                     className: "!min-w-0",
                   }}
                   label="Date"
+                  value={state.transporterDate}
                   type="date"
                   name="transporterDate"
                   onChange={handleChange}
@@ -567,6 +574,7 @@ function App() {
                 size="lg"
                 label="Name of Person Collection Information"
                 type="text"
+                value={state.transporterName}
                 containerProps={{
                   className: "!min-w-0",
                 }}
@@ -609,7 +617,10 @@ function App() {
           <div className="flex items-start gap-2">
             <Checkbox id="agree" />
             <label htmlFor="agree" className="text-zinc-800">
-            I certify that the contents of this shipment are fully and accurately described, labeled and are in proper condition for transportation according to the applicable state and federal regulations.
+              I certify that the contents of this shipment are fully and
+              accurately described, labeled and are in proper condition for
+              transportation according to the applicable state and federal
+              regulations.
             </label>
           </div>
           <SignPad state={state} setState={setState} />

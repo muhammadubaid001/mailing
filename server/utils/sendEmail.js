@@ -7,6 +7,7 @@ const sendEmail = async ({ email, subject, message, data, id, buffer }) => {
   const output = `
         <div>
             <h1>Generator Information</h1>
+            <p>New Client: ${data.isNew ? "Yes" : "No"}</p>
             <p>Client: ${data.client}</p>
             <p>Email: ${data.email}</p>
             <p>Address: ${data.address}</p>

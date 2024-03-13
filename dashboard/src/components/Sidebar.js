@@ -7,7 +7,10 @@ export const Sidebar = ({ data, state, setState, setReferenceNumber }) => {
     to: null,
   });
   const handleClick = (item) => {
-    setState(item);
+    console.log(item);
+    setState({
+      ...item,
+    });
   };
 
   const filterDataByDateRange = () => {
