@@ -21,6 +21,7 @@ const sendEmail = async ({ email, subject, message, data, id, buffer }) => {
             <p>Address: ${data.transporterAddress}</p>
             <p>Phone: ${data.transporterPhoneNumber}</p>
             <p>Date: ${data.transporterDate}</p>
+            <p>Contact: ${data.contact}</p>
         </div>
     `;
 
@@ -58,7 +59,8 @@ const sendEmail = async ({ email, subject, message, data, id, buffer }) => {
   doc.text(`Address: ${data.transporterAddress}`, 80, 430);
   doc.text(`Phone: ${data.transporterPhoneNumber}`, 80, 450);
   doc.text(`Date: ${data.transporterDate}`, 80, 470);
-  doc.text("I certify that the contents of this shipment are fully and accurately described, labeled and are in proper condition for transportation according to the applicable state and federal regulations.", 60, 490);
+  doc.text(`Contact: ${data.contact}`, 80, 490);
+  doc.text("I certify that the contents of this shipment are fully and accurately described, labeled and are in proper condition for transportation according to the applicable state and federal regulations.", 60, 510);
 
   // doc.pipe(
   //   fs.createWriteStream(path.join(__dirname, "..", `/public/${id}.PNG`))

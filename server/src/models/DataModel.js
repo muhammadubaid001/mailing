@@ -38,6 +38,9 @@ const dataSchema = new Schema(
     transporterDate: {
       type: String,
     },
+    contact: {
+      type: String,
+    },
     referenceNumber: {
       type: Number,
       required: true,
