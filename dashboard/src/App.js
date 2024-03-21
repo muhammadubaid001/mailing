@@ -329,6 +329,7 @@ function App() {
     sign: "",
     companyName: "",
     representative: "",
+    contact: "",
     transporterName: "",
     transporterAddress: "7600 SE Johnson Creek Blvd, Portland, OR 97206",
     transporterPhoneNumber: "503-477-8765",
@@ -336,7 +337,7 @@ function App() {
   });
   const [referenceNumber, setReferenceNumber] = useState(null);
   const [data, setData] = useState([]);
-  const [isNew, setIsNew] = useState(false)
+  const [isNew, setIsNew] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
@@ -373,7 +374,10 @@ function App() {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post(`${process.env.REACT_APP_API_DOMAIN}/api/send`, {...state, isNew});
+      await axios.post(`${process.env.REACT_APP_API_DOMAIN}/api/send`, {
+        ...state,
+        isNew,
+      });
       fetchData();
       alert("Email sent successfully");
     } catch (error) {
@@ -456,7 +460,10 @@ function App() {
                   Generator Information
                 </Typography>
                 <label className="flex items-center text-gray-900 text-sm font-semibold">
-                  <Checkbox value={isNew} onChange={e => setIsNew(e.target.checked)} />
+                  <Checkbox
+                    value={isNew}
+                    onChange={(e) => setIsNew(e.target.checked)}
+                  />
                   New Client
                 </label>
               </div>
@@ -614,6 +621,20 @@ function App() {
               />
             </div>
           </div>
+          <div className="flex items-center gap-4 ">
+            <Input
+              size="lg"
+              label="Contact"
+              type="text"
+              name="contact"
+              containerProps={{
+                className: "w-1/2 pr-2",
+              }}
+              value={state.representative}
+              onChange={handleChange}
+            />
+          </div>
+          <SignPad state={state} setState={setState} />
           <div className="flex items-start gap-2">
             <Checkbox id="agree" />
             <label htmlFor="agree" className="text-zinc-800">
@@ -623,7 +644,6 @@ function App() {
               regulations.
             </label>
           </div>
-          <SignPad state={state} setState={setState} />
           <Button disabled={loading} type="submit" variant="gradient">
             {loading ? "Loading..." : "Submit"}
           </Button>
