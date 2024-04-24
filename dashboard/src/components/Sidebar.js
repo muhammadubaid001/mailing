@@ -1,5 +1,6 @@
-import { Input, Typography } from "@material-tailwind/react";
+import { Input, Typography, Button } from "@material-tailwind/react";
 import { useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 export const Sidebar = ({ data, state, setState, setReferenceNumber }) => {
   const [filters, setFilters] = useState({
@@ -7,7 +8,6 @@ export const Sidebar = ({ data, state, setState, setReferenceNumber }) => {
     to: null,
   });
   const handleClick = (item) => {
-    console.log(item);
     setState({
       ...item,
     });
@@ -27,10 +27,21 @@ export const Sidebar = ({ data, state, setState, setReferenceNumber }) => {
     }
   };
 
+  const navigate = useNavigate();
+  const [params] = useSearchParams();
 
-  return (
+    return (
     <div className="w-80 overflow-auto hidden md:block bg-white shadow-sm p-5">
-      <Typography variant="h6" className="mb-1">
+      {!params.has("view") ? (
+        <Button className="w-full" onClick={() => navigate("/?view=table")}>
+          View Table
+        </Button>
+      ) : (
+        <Button className="w-full" onClick={() => navigate("/")}>
+          View Form
+        </Button>
+      )}
+      <Typography variant="h6" className="mb-1 mt-1">
         Date Range
       </Typography>
       <div className="flex gap-2">

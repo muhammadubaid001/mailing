@@ -10,6 +10,9 @@ import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
 import SignPad from "./components/Signpad";
 import { Sidebar } from "./components/Sidebar";
+import { useSearchParams } from "react-router-dom";
+import { TableView } from "./TableView";
+import { exportToCSV } from "./utils/funcs";
 
 const Clients = [
   {
@@ -340,6 +343,8 @@ function App() {
   const [isNew, setIsNew] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const [params] = useSearchParams();
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setState({
@@ -407,24 +412,32 @@ function App() {
         setState={setState}
       />
 
-      <div className="h-full flex flex-col items-center justify-between mx-auto">
-        <form
-          onSubmit={handleSubmit}
-          className="flex w-full flex-col gap-6 p-3 md:p-8"
-        >
-          <div className="flex items-center justify-between">
-            <Typography variant="h3" className="leading-none">
-              Regulated Medical Waste Manifest
-            </Typography>
-            <div className="flex gap-2 items-center">
-              <Typography>
-                Ref #:{" "}
-                {!isNew && state?.referenceNumber
-                  ? state?.referenceNumber
-                  : max?.referenceNumber + 1}
+      {params.has("view") ? (
+        <div className="py-6 pr-4 h-full w-full overflow-scroll">
+          <Button onClick={() => exportToCSV(data.map(({ sign, ...rest }) => rest), "data")}>
+            Export Data
+          </Button>
+          <TableView data={filteredData} />
+          </div>
+      ) : (
+        <div className="h-full flex flex-col items-center justify-between mx-auto">
+          <form
+            onSubmit={handleSubmit}
+            className="flex w-full flex-col gap-6 p-3 md:p-8"
+          >
+            <div className="flex items-center justify-between">
+              <Typography variant="h3" className="leading-none">
+                Regulated Medical Waste Manifest
               </Typography>
-              {/* <PDFDownloadLink document={<PDFFile data={state} />} fileName="file"> */}
-              {/* <Button
+              <div className="flex gap-2 items-center">
+                <Typography>
+                  Ref #:{" "}
+                  {!isNew && state?.referenceNumber
+                    ? state?.referenceNumber
+                    : max?.referenceNumber + 1}
+                </Typography>
+                {/* <PDFDownloadLink document={<PDFFile data={state} />} fileName="file"> */}
+                {/* <Button
                 color="green"
                 variant="gradient"
                 onClick={() => generatePDF(targetRef, {
@@ -450,205 +463,206 @@ function App() {
                 </svg>
                 Export PDF
               </Button> */}
-              {/* </PDFDownloadLink> */}
-            </div>
-          </div>
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="w-full flex-1">
-              <div className="flex items-center justify-between">
-                <Typography variant="h5" className="pb-2">
-                  Generator Information
-                </Typography>
-                <label className="flex items-center text-gray-900 text-sm font-semibold">
-                  <Checkbox
-                    value={isNew}
-                    onChange={(e) => setIsNew(e.target.checked)}
-                  />
-                  New Client
-                </label>
-              </div>
-              <Select
-                size="lg"
-                value={state.client}
-                name="client"
-                onChange={(value) => handleChangeClient(value)}
-                label="Select Client"
-              >
-                {Clients.map((item) => (
-                  <Option key={item.Client} value={item.Client}>
-                    {item.Client}
-                  </Option>
-                ))}
-              </Select>
-              <div className="flex gap-4 my-4">
-                <Input
-                  size="lg"
-                  label="Date"
-                  type="date"
-                  containerProps={{
-                    className: "!min-w-0",
-                  }}
-                  value={state.generalDate}
-                  name="generalDate"
-                  onChange={handleChange}
-                />
-                <Input
-                  size="lg"
-                  label="Address"
-                  value={state.address}
-                  name="address"
-                  containerProps={{
-                    className: "!min-w-0",
-                  }}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="w-full flex gap-4 my-4">
-                <Input
-                  size="lg"
-                  label="Telephone"
-                  value={state.phoneNumber}
-                  type="text"
-                  containerProps={{
-                    className: "!min-w-0",
-                  }}
-                  name="phoneNumber"
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="w-full flex gap-4 mt-4">
-                <Input
-                  size="lg"
-                  label="Add Client"
-                  name="client"
-                  containerProps={{
-                    className: "!min-w-0",
-                  }}
-                  value={state.client}
-                  onChange={handleChange}
-                />
-                <Input
-                  size="lg"
-                  value={state.email}
-                  label="Email"
-                  containerProps={{
-                    className: "!min-w-0",
-                  }}
-                  type="email"
-                  name="email"
-                  onChange={handleChange}
-                />
+                {/* </PDFDownloadLink> */}
               </div>
             </div>
-            <div className="w-full flex-1 mt-2">
-              <Typography variant="h5" className="pb-2">
-                Transporter Information
-              </Typography>
-              <div className="w-full flex gap-4 mb-4">
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="w-full flex-1">
+                <div className="flex items-center justify-between">
+                  <Typography variant="h5" className="pb-2">
+                    Generator Information
+                  </Typography>
+                  <label className="flex items-center text-gray-900 text-sm font-semibold">
+                    <Checkbox
+                      value={isNew}
+                      onChange={(e) => setIsNew(e.target.checked)}
+                    />
+                    New Client
+                  </label>
+                </div>
                 <Select
-                  label="Company"
                   size="lg"
-                  value={state.companyName}
-                  onChange={(value) =>
-                    setState({
-                      ...state,
-                      companyName: value,
-                      company: value,
-                    })
-                  }
+                  value={state.client}
+                  name="client"
+                  onChange={(value) => handleChangeClient(value)}
+                  label="Select Client"
                 >
-                  {["Synergy Environmental", "Rapid Response Bio Clean"].map(
-                    (item) => (
-                      <Option key={item} value={item}>
-                        {item}
-                      </Option>
-                    )
-                  )}
+                  {Clients.map((item) => (
+                    <Option key={item.Client} value={item.Client}>
+                      {item.Client}
+                    </Option>
+                  ))}
                 </Select>
-                <Input
-                  size="lg"
-                  containerProps={{
-                    className: "!min-w-0",
-                  }}
-                  label="Date"
-                  value={state.transporterDate}
-                  type="date"
-                  name="transporterDate"
-                  onChange={handleChange}
-                />
+                <div className="flex gap-4 my-4">
+                  <Input
+                    size="lg"
+                    label="Date"
+                    type="date"
+                    containerProps={{
+                      className: "!min-w-0",
+                    }}
+                    value={state.generalDate}
+                    name="generalDate"
+                    onChange={handleChange}
+                  />
+                  <Input
+                    size="lg"
+                    label="Address"
+                    value={state.address}
+                    name="address"
+                    containerProps={{
+                      className: "!min-w-0",
+                    }}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="w-full flex gap-4 my-4">
+                  <Input
+                    size="lg"
+                    label="Telephone"
+                    value={state.phoneNumber}
+                    type="text"
+                    containerProps={{
+                      className: "!min-w-0",
+                    }}
+                    name="phoneNumber"
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="w-full flex gap-4 mt-4">
+                  <Input
+                    size="lg"
+                    label="Add Client"
+                    name="client"
+                    containerProps={{
+                      className: "!min-w-0",
+                    }}
+                    value={state.client}
+                    onChange={handleChange}
+                  />
+                  <Input
+                    size="lg"
+                    value={state.email}
+                    label="Email"
+                    containerProps={{
+                      className: "!min-w-0",
+                    }}
+                    type="email"
+                    name="email"
+                    onChange={handleChange}
+                  />
+                </div>
               </div>
-              <Input
-                size="lg"
-                label="Name of Person Collection Information"
-                type="text"
-                value={state.transporterName}
-                containerProps={{
-                  className: "!min-w-0",
-                }}
-                name="transporterName"
-                onChange={handleChange}
-              />
-              <div className="w-full flex gap-4 my-4">
+              <div className="w-full flex-1 mt-2">
+                <Typography variant="h5" className="pb-2">
+                  Transporter Information
+                </Typography>
+                <div className="w-full flex gap-4 mb-4">
+                  <Select
+                    label="Company"
+                    size="lg"
+                    value={state.companyName}
+                    onChange={(value) =>
+                      setState({
+                        ...state,
+                        companyName: value,
+                        company: value,
+                      })
+                    }
+                  >
+                    {["Synergy Environmental", "Rapid Response Bio Clean"].map(
+                      (item) => (
+                        <Option key={item} value={item}>
+                          {item}
+                        </Option>
+                      )
+                    )}
+                  </Select>
+                  <Input
+                    size="lg"
+                    containerProps={{
+                      className: "!min-w-0",
+                    }}
+                    label="Date"
+                    value={state.transporterDate}
+                    type="date"
+                    name="transporterDate"
+                    onChange={handleChange}
+                  />
+                </div>
                 <Input
                   size="lg"
-                  label="Address"
-                  containerProps={{
-                    className: "!min-w-0",
-                  }}
-                  value={state.transporterAddress}
-                  name="transporterAddress"
-                  onChange={handleChange}
-                />
-                <Input
-                  size="lg"
-                  label="Telephone"
-                  containerProps={{
-                    className: "!min-w-0",
-                  }}
+                  label="Name of Person Collection Information"
                   type="text"
-                  value={state.transporterPhoneNumber}
-                  name="transporterPhoneNumber"
+                  value={state.transporterName}
+                  containerProps={{
+                    className: "!min-w-0",
+                  }}
+                  name="transporterName"
+                  onChange={handleChange}
+                />
+                <div className="w-full flex gap-4 my-4">
+                  <Input
+                    size="lg"
+                    label="Address"
+                    containerProps={{
+                      className: "!min-w-0",
+                    }}
+                    value={state.transporterAddress}
+                    name="transporterAddress"
+                    onChange={handleChange}
+                  />
+                  <Input
+                    size="lg"
+                    label="Telephone"
+                    containerProps={{
+                      className: "!min-w-0",
+                    }}
+                    type="text"
+                    value={state.transporterPhoneNumber}
+                    name="transporterPhoneNumber"
+                    onChange={handleChange}
+                  />
+                </div>
+                <Input
+                  size="lg"
+                  label="Items Collected"
+                  type="text"
+                  name="representative"
+                  value={state.representative}
                   onChange={handleChange}
                 />
               </div>
+            </div>
+            <div className="flex items-center gap-4 ">
               <Input
                 size="lg"
-                label="Items Collected"
+                label="Contact"
                 type="text"
-                name="representative"
+                name="contact"
+                containerProps={{
+                  className: "w-1/2 pr-2",
+                }}
                 value={state.representative}
                 onChange={handleChange}
               />
             </div>
-          </div>
-          <div className="flex items-center gap-4 ">
-            <Input
-              size="lg"
-              label="Contact"
-              type="text"
-              name="contact"
-              containerProps={{
-                className: "w-1/2 pr-2",
-              }}
-              value={state.representative}
-              onChange={handleChange}
-            />
-          </div>
-          <SignPad state={state} setState={setState} />
-          <div className="flex items-start gap-2">
-            <Checkbox id="agree" />
-            <label htmlFor="agree" className="text-zinc-800">
-              I certify that the contents of this shipment are fully and
-              accurately described, labeled and are in proper condition for
-              transportation according to the applicable state and federal
-              regulations.
-            </label>
-          </div>
-          <Button disabled={loading} type="submit" variant="gradient">
-            {loading ? "Loading..." : "Submit"}
-          </Button>
-        </form>
-      </div>
+            <SignPad state={state} setState={setState} />
+            <div className="flex items-start gap-2">
+              <Checkbox id="agree" />
+              <label htmlFor="agree" className="text-zinc-800">
+                I certify that the contents of this shipment are fully and
+                accurately described, labeled and are in proper condition for
+                transportation according to the applicable state and federal
+                regulations.
+              </label>
+            </div>
+            <Button disabled={loading} type="submit" variant="gradient">
+              {loading ? "Loading..." : "Submit"}
+            </Button>
+          </form>
+        </div>
+      )}
     </div>
   );
 }
