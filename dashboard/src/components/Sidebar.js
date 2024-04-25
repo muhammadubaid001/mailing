@@ -2,35 +2,19 @@ import { Input, Typography, Button } from "@material-tailwind/react";
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-export const Sidebar = ({ data, state, setState, setReferenceNumber }) => {
-  const [filters, setFilters] = useState({
-    from: null,
-    to: null,
-  });
+export const Sidebar = ({ data, state, setState,filters, setFilters, filterDataByDateRange, setReferenceNumber }) => {
+ 
+
   const handleClick = (item) => {
     setState({
       ...item,
     });
   };
 
-  const filterDataByDateRange = () => {
-    if (filters.from && filters.to) {
-      return data.filter((item) => {
-        const createdAtDate = new Date(item.createdAt);
-        return (
-          createdAtDate >= new Date(filters.from) &&
-          createdAtDate <= new Date(filters.to)
-        );
-      });
-    } else {
-      return data;
-    }
-  };
-
   const navigate = useNavigate();
   const [params] = useSearchParams();
 
-    return (
+  return (
     <div className="w-80 overflow-auto hidden md:block bg-white shadow-sm p-5">
       {!params.has("view") ? (
         <Button className="w-full" onClick={() => navigate("/?view=table")}>

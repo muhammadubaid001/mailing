@@ -392,6 +392,26 @@ function App() {
     }
   };
 
+  const [filters, setFilters] = useState({
+    from: null,
+    to: null,
+  });
+  
+
+  const filterDataByDateRange = () => {
+    if (filters.from && filters.to) {
+      return data.filter((item) => {
+        const createdAtDate = new Date(item.createdAt);
+        return (
+          createdAtDate >= new Date(filters.from) &&
+          createdAtDate <= new Date(filters.to)
+        );
+      });
+    } else {
+      return data;
+    }
+  };
+
   const max = data?.reduce((prev, current) => {
     return prev.referenceNumber > current.referenceNumber ? prev : current;
   }, 0);
@@ -408,7 +428,10 @@ function App() {
         data={filteredData}
         referenceNumber={referenceNumber}
         setReferenceNumber={setReferenceNumber}
+        filterDataByDateRange={filterDataByDateRange}
         state={state}
+        filters={filters}
+        setFilters={setFilters}
         setState={setState}
       />
 
@@ -417,7 +440,7 @@ function App() {
           <Button onClick={() => exportToCSV(data.map(({ sign, ...rest }) => rest), "data")}>
             Export Data
           </Button>
-          <TableView data={filteredData} />
+          <TableView data={filterDataByDateRange()} />
           </div>
       ) : (
         <div className="h-full flex flex-col items-center justify-between mx-auto">
