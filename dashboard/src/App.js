@@ -453,12 +453,12 @@ function App() {
                 Regulated Medical Waste Manifest
               </Typography>
               <div className="flex gap-2 items-center">
-                <Typography>
+                {/* <Typography>
                   Ref #:{" "}
                   {!isNew && state?.referenceNumber
                     ? state?.referenceNumber
                     : max?.referenceNumber + 1}
-                </Typography>
+                </Typography> */}
                 {/* <PDFDownloadLink document={<PDFFile data={state} />} fileName="file"> */}
                 {/* <Button
                 color="green"

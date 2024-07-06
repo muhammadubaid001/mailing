@@ -59,10 +59,10 @@ export const Sidebar = ({ data, state, setState,filters, setFilters, filterDataB
       <Typography variant="h6" className="mt-2">
         References
       </Typography>
-      <Input
+      {/* <Input
         onChange={(e) => setReferenceNumber(e.target.value)}
         label="Search"
-      />
+      /> */}
       <div className="flex flex-col gap-2 mt-4">
         {filterDataByDateRange()?.map((item) => (
           <div
